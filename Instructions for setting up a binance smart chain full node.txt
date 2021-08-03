@@ -14,7 +14,7 @@ save and exit (ctrl x, y, enter)
 then run:
 chmod +x start.sh
 sudo apt-get install unzip
-wget https://github.com/binance-chain/bsc/releases/download/v1.1.0-beta/mainnet.zip
+wget https://github.com/binance-chain/bsc/releases/download/v1.1.1-beta/mainnet.zip
 unzip mainnet.zip
 ./geth_linux --datadir mainnet init genesis.json
 
@@ -38,4 +38,6 @@ then:
 chown -R geth.geth /home/geth/*
 systemctl enable geth
 systemctl start geth
-tail -f /home/geth/mainnet/bsc.log
+
+To follow the sync process, you can use this command:
+tail -F /home/geth/mainnet/bsc.log
