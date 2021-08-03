@@ -1,0 +1,41 @@
+Original author PhatJay
+
+sudo useradd -m geth
+cd /home/geth
+#
+wget  https://github.com/binance-chain/bsc/releases/download/v1.1.1-beta/geth_linux
+chmod +x geth_linux
+
+nano start.sh and paste the following:
+./geth_linux --syncmode snap --config ./config.toml --datadir ./mainnet --cache 18000 --rpc.allow-unprotected-txs --txlookuplimit 0 --http --maxpeers 30 --ws
+
+save and exit (ctrl x, y, enter)
+
+then run:
+chmod +x start.sh
+sudo apt-get install unzip
+wget https://github.com/binance-chain/bsc/releases/download/v1.1.0-beta/mainnet.zip
+unzip mainnet.zip
+./geth_linux --datadir mainnet init genesis.json
+
+Then setup systemd:
+sudo nano /lib/systemd/system/geth.service
+paste the following:
+[Unit]
+Description=BSC Full Node
+[Service]
+User=geth
+Type=simple
+WorkingDirectory=/home/geth
+ExecStart=/bin/bash /home/geth/start.sh
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=default.target
+
+save and exit
+then:
+chown -R geth.geth /home/geth/*
+systemctl enable geth
+systemctl start geth
+tail -f /home/geth/mainnet/bsc.log
